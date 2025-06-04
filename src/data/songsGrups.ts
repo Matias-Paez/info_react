@@ -1,9 +1,4 @@
-import './App.css'
-import Navbar from './components/Navbar'
-import SongCard from './components/SongCard'
-import SongCardContainer from './components/SongCardcontainer'
-
-type Song = {
+export type Song = {
   id: string;
   title: string;
   autor: string;
@@ -11,14 +6,14 @@ type Song = {
   src: string;
 };
 
-type SongGroup = {
+export type SongGroup = {
   id: string;
   title: string;
   songs: Song[];
 };
 
 
-const songGroups : SongGroup[]= [
+export const songGroups : SongGroup[]= [
   {
     id: "1",
     title: "Tus canciones favoritas",
@@ -35,7 +30,7 @@ const songGroups : SongGroup[]= [
         title: "BZRP Music Sessions #52",
         autor: "Bizarrap, Quevedo",
         time: "3:18",
-        src: "/assets/bzrp52.jpg",
+        src: "/assets/bzrp52.jpeg",
       },
       {
         id: "3",
@@ -55,14 +50,14 @@ const songGroups : SongGroup[]= [
         title: "As It Was",
         autor: "Harry Styles",
         time: "2:47",
-        src: "/assets/asitwas.jpg",
+        src: "/assets/asitwas.jpeg",
       },
       {
         id: "5",
         title: "Levitating",
         autor: "Dua Lipa",
         time: "3:23",
-        src: "/assets/levitating.jpg",
+        src: "/assets/levitating.jpeg",
       },
       {
         id: "6",
@@ -82,7 +77,7 @@ const songGroups : SongGroup[]= [
         title: "Blinding Lights",
         autor: "The Weeknd",
         time: "3:20",
-        src: "/assets/blinding.jpg",
+        src: "/assets/blinding.jpeg",
       },
       {
         id: "8",
@@ -101,29 +96,3 @@ const songGroups : SongGroup[]= [
     ],
   },
 ];
-
-
-function App() {
-  return (
-    <>
-      <Navbar/>
-      { songGroups.map( (grup) =>
-      (
-        <SongCardContainer
-        title={grup.title}
-        >
-          {grup.songs.map((song) =>(
-            <SongCard
-            title={song.title}
-            autor={song.autor}
-            time= {song.time}
-            src={song.src}
-            />
-          ))}
-        </SongCardContainer>
-      ))}
-    </>
-  )
-}
-
-export default App
