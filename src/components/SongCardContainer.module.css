@@ -1,5 +1,5 @@
 .article_container {
-  padding: 32px 24px;
+  padding: 24px 24px;
   background-color: #121212;
   color: white;
 }
@@ -10,8 +10,9 @@
   margin-bottom: 20px;
 }
 
+
 .songs {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 24px;
 }
