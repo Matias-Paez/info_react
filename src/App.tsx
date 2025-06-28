@@ -7,10 +7,17 @@ import SoundPlayer from './components/SoundPlayer.tsx'
 
 import songGroups from './data/songsGrups.ts';
 
+type Song ={
+  title:string;
+  autor :string;
+  time :string;
+  src :string;
+}
+
 function App() {
   const [selectedSong, setSelectedSong] = useState({title:'- . -' , autor:'-' , time:'-' , src:'/icons/song/default.png'}); //default 
   
-  function handleSongSelect(song) {
+  function handleSongSelect(song:Song) {
     setSelectedSong(song); // Guarda la canción seleccionada
   };
 

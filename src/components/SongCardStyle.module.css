@@ -3,7 +3,7 @@
   color: white;
   border-radius: 8px;
   padding: 16px;
-  width: 180px;
+  width: 140px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }

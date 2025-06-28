@@ -92,6 +92,7 @@ function SoundPlayer({song}){
                     max="100"
                     value={duration ? (currentTime / duration) * 100 : 0}
                     onChange={handleSeek}
+                    style={{'--progress': `${duration ? (currentTime / duration) * 100 : 0}%`} as React.CSSProperties }
                 />
                 <span>{time}</span>
                 </div>
