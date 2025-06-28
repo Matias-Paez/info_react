@@ -8,7 +8,7 @@ function Navbar() {
       <div className={styles.left}>
         <img src={spotifyLogo} alt="Spotify" className={styles.logo} />
       </div>
-
+      <input type="search" name="Busca" id="" placeholder="Encuentra tu cancion favorita"/>
       <ul className={styles.navList}>
         <li><a className={styles.link} href="#">Home</a></li>
         <li><a className={styles.link} href="#">Planes</a></li>
