@@ -1,90 +1,104 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from './SoundPlayerStyles.module.css';
 
-import data from '../data/songsGrups';
-
-type SongCardProps ={
-    title : string ,
-    autor : string,
-    time : string,
-    src : string,
-};
-
-function SoundPlayer(props : SongCardProps){
-    const {title = '-' , autor = '-' , time = '0:0' , src = './icons/audio/defaul.png'} = props;
+function SoundPlayer({song}){
+    const {title , autor , time , src} = song;
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
+    
+    
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    
+    useEffect(() => {
+        const audio = audioRef.current;
+        
+        function handleTimeUpdate() {
+            setCurrentTime(audio.currentTime);
+        }
+
+        function handleLoadedMetadata() {
+            setDuration(audio.duration);
+        }
+
+        if (audio) {
+            audio.addEventListener('timeupdate', handleTimeUpdate);
+            audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+        }
+
+        return () => {
+            if (audio) {
+                audio.removeEventListener('timeupdate', handleTimeUpdate);
+                audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            }
+        };
+    }, []);
     
     function togglePlay(){
-        console.log('0');
+        if(!isPlaying){
+            audioRef.current?.play();
+        }else{
+            audioRef.current?.pause();
+        }
         setIsPlaying(!isPlaying);
     }
+    
+    function handleSeek(event) {
+        const value = parseFloat(event.target.value);
+        
+        if (duration && audioRef.current) {
+            const newTime = (value / 100) * duration;
+            audioRef.current.currentTime = newTime;
+            setCurrentTime(newTime);
+        }
+    }
+
+    function formatTime(seconds:number){
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${min}:${sec}`;
+    };
 
     return(
             
         <div className={styles.player}>
 
             <div className={styles.left}>
-                <img src= "./assets/antihero.jpeg" alt="Portada" className={styles.cover} />
+                <img src={src} alt="Portada" className={styles.cover} />
                 <div className={styles.info}>
                 <h3>{title}</h3>
                 <p>{autor}</p>
                 </div>
             </div>
 
-        {/* Centro */}
             <div className={styles.center}>
                 <div className={styles.controls}>
                     <img src="./icons/audio/previous.png" alt="Previous" />
-                    <img onClick={togglePlay} src={isPlaying ? './icons/audio/play.png' : './icons/audio/pause.png'} alt="Play/Pause" />    
+                    <img onClick={togglePlay} src={
+                        isPlaying ?
+                        './icons/audio/pause.png'
+                        : 
+                        './icons/audio/play.png' 
+                        } alt="Play/Pause" />    
                     <img src="./icons/audio/next.png" alt="Next" />
                 </div>
 
                 <div className={styles.progress}>
                 
-                <span>{time} </span>
+                <span>{formatTime(currentTime)} </span>
                 <input
                     type="range"
                     min="0"
                     max="100"
-                    value={20}
-                    
+                    value={duration ? (currentTime / duration) * 100 : 0}
+                    onChange={handleSeek}
                 />
-                <span>{ time}</span>
+                <span>{time}</span>
                 </div>
             </div>
 
-        <audio ref={audioRef} src="./sound/Ordinary.mp3" />
+        <audio ref={audioRef} autoPlay src="./sound/Ordinary.mp3" />
         </div>
     );
-    /*
-    function handlerPlay(){
-        if(audioRef.current){
-            if(isPlaying){
-                audioRef.current.pause();
-            }else{
-                audioRef.current.play();
-            }
-        }
-
-        setIsPlaying(!isPlaying);
-    }
-
-    return(
-        <div>
-            <img src={!isPlaying ? './icons/audio/play.png' : '/icons/audio/pause.png'} onClick={handlerPlay} alt="" />
-            <audio ref={audioRef} autoPlay={true} controls src="./sound/Ordinary.mp3"></audio>
-        </div>
-    );
-    */
-/*
-<video ref={videoRef} onTimeUpdate={handleTimeUpdate} width="250">
-        <source
-          src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-          type="video/mp4"
-        />
-      </video>*/
-
 }
 export default SoundPlayer;
-
