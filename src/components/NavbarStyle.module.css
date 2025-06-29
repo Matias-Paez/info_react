@@ -21,6 +21,27 @@
   gap: 12px;
 }
 
+.search_input{
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  background-color: #2C2C2C;
+  color: #FFFFFF;
+  font-size: 14px;
+  outline: none;
+  border: none;
+}
+
+.search_input::placeholder{
+  color: #AAA;
+}
+
+.search_input:focus{
+  background-color: #333;
+  box-shadow: 0 0 0 2px #1DB954;
+}
+
 .logo {
   height: 32px;
 }

@@ -15,36 +15,72 @@ type Song ={
 }
 
 function App() {
-  const [selectedSong, setSelectedSong] = useState({title:'- . -' , autor:'-' , time:'-' , src:'/icons/song/default.png'}); //default 
-  
+  const [selectedSong, setSelectedSong] = useState({title:'- . -' , autor:'-' , time:'-' , src:'/icons/song/default.png'}); //default Song
+  const [searchSong, setSearchSong]= useState("");
+
+  const isSearching = searchSong.trim() !== ""; //para determinar si estoy realizando una busqueda
+
+
   function handleSongSelect(song:Song) {
     setSelectedSong(song); // Guarda la canción seleccionada
   };
 
+  function handleSearchChange(name: string){
+    setSearchSong(name.toLowerCase()); //convierto a minusculas
+  }
+
+  //filtro las canciones 
+  const filterSongs = isSearching ? songGroups.flatMap(group =>
+    group.songs.filter( song => 
+      song.title.toLowerCase().includes(searchSong)
+    )
+  ) : [];
+  
   return (
     <>
-      <Navbar/>
-        <main style={{ padding: "32px" }}>
-        <div>        
-          { songGroups.map( (grup) =>
-          (
-            <SongCardContainer
-            title={grup.title}
-            key={grup.id}
-            >
-              {grup.songs.map((song) =>(
-                <SongCard
-                title={song.title}
-                autor={song.autor}
-                time= {song.time}
-                src={song.src}
-                key={song.id}
-                onClick = {() => handleSongSelect(song) }
-                />
-              ))}
+      <Navbar onSearchChange={handleSearchChange}/>
+      
+      <main style={{ padding: "24px"}}>
+
+        <div style={{width: '100%' , maxWidth:'1200px' , margin: '0 auto'}}>
+          {isSearching? ( filterSongs.length === 0? (
+            <p>No se encontraron resultados.</p>
+          ) : (
+            //mostramos los resultados de las canciones
+            <SongCardContainer title="Resultados" >
+              <div style={{
+                display:'grid', 
+                gridTemplateColumns: 'repeat(6, 1fr)' 
+                , gap:'24px' 
+                , width:'100%'}}>
+                  {filterSongs.map( (song) => (
+                    <SongCard
+                    key={song.id}
+                    {...song}
+                    onClick={() => handleSongSelect (song)}
+                    />
+                    
+                  ))
+                }
+              </div>
             </SongCardContainer>
-          ))}
+          )
+        ): (
+          //Mostramos todos los grupos
+          songGroups.map((group) => (
+            <SongCardContainer title={group.title} key={group.id}>
+              {group.songs.map( (song) => (
+                    <SongCard
+                      key={song.id}
+                      {...song}
+                      onClick={() => handleSongSelect (song)}
+                    />
+                  ))}
+            </SongCardContainer>
+          ))
+        )}
         </div>
+
       </main>
 
       <div style={{padding: '16px'}}>
