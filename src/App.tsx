@@ -1,33 +1,18 @@
 import { useState } from 'react'
-import './App.css'
 import Navbar from './components/Navbar'
 import SongCard from './components/SongCard'
 import SongCardContainer from './components/SongCardcontainer'
 import SoundPlayer from './components/SoundPlayer.tsx'
-
+import './App.css'
+import styles from './App.module.css';
 import songGroups from './data/songsGrups.ts';
-
-type Song ={
-  title:string;
-  autor :string;
-  time :string;
-  src :string;
-}
+import type { Song } from './types/Song.ts'
 
 function App() {
-  const [selectedSong, setSelectedSong] = useState({title:'- . -' , autor:'-' , time:'-' , src:'/icons/song/default.png'}); //default Song
+  const [selectedSong, setSelectedSong] = useState<Song>();
   const [searchSong, setSearchSong]= useState("");
 
   const isSearching = searchSong.trim() !== ""; //para determinar si estoy realizando una busqueda
-
-
-  function handleSongSelect(song:Song) {
-    setSelectedSong(song); // Guarda la canción seleccionada
-  };
-
-  function handleSearchChange(name: string){
-    setSearchSong(name.toLowerCase()); //convierto a minusculas
-  }
 
   //filtro las canciones 
   const filterSongs = isSearching ? songGroups.flatMap(group =>
@@ -38,26 +23,21 @@ function App() {
   
   return (
     <>
-      <Navbar onSearchChange={handleSearchChange}/>
-      
-      <main style={{ padding: "24px"}}>
+      <Navbar setSearchSong={setSearchSong}/>
 
-        <div style={{width: '100%' , maxWidth:'1200px' , margin: '0 auto'}}>
+      <main className={styles.main}>
+        <div className={styles.content}>
           {isSearching? ( filterSongs.length === 0? (
             <p>No se encontraron resultados.</p>
           ) : (
             //mostramos los resultados de las canciones
             <SongCardContainer title="Resultados" >
-              <div style={{
-                display:'grid', 
-                gridTemplateColumns: 'repeat(6, 1fr)' 
-                , gap:'24px' 
-                , width:'100%'}}>
+              <div className={styles.content_resultados}>
                   {filterSongs.map( (song) => (
                     <SongCard
                     key={song.id}
-                    {...song}
-                    onClick={() => handleSongSelect (song)}
+                    song={song}
+                    setSelectedSong={setSelectedSong}
                     />
                     
                   ))
@@ -72,18 +52,17 @@ function App() {
               {group.songs.map( (song) => (
                     <SongCard
                       key={song.id}
-                      {...song}
-                      onClick={() => handleSongSelect (song)}
+                      song={song}
+                      setSelectedSong={setSelectedSong}
                     />
                   ))}
             </SongCardContainer>
           ))
         )}
         </div>
-
       </main>
 
-      <div style={{padding: '16px'}}>
+      <div className={styles.div_music} >
         {selectedSong && <SoundPlayer song={selectedSong} key={selectedSong.id} />}
       </div>
       

@@ -1,7 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import styles from './SoundPlayerStyles.module.css';
+import type { Song } from "../types/Song";
 
-function SoundPlayer({song}){
+type SoundPlayerProps={
+    song:Song;
+}
+
+function SoundPlayer( {song} : SoundPlayerProps){
     const {title , autor , time , src} = song;
     const audioRef = useRef<HTMLAudioElement | null>(null);
     
@@ -14,11 +19,15 @@ function SoundPlayer({song}){
         const audio = audioRef.current;
         
         function handleTimeUpdate() {
-            setCurrentTime(audio.currentTime);
+            if (audio){
+                setCurrentTime(audio.currentTime);
+            }
         }
 
         function handleLoadedMetadata() {
-            setDuration(audio.duration);
+            if(audio){
+                setDuration(audio.duration);
+            }
         }
 
         if (audio) {
@@ -43,7 +52,7 @@ function SoundPlayer({song}){
         setIsPlaying(!isPlaying);
     }
     
-    function handleSeek(event) {
+    function handleSeek(event : React.ChangeEvent<HTMLInputElement>) {
         const value = parseFloat(event.target.value);
         
         if (duration && audioRef.current) {

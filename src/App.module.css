@@ -1,0 +1,18 @@
+.main{
+    padding: 24px;
+}
+.content{
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.content_resultados{
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    gap: 24px;
+    width: 100%;
+}
+
+.div_music{
+    padding: 16px;
+}

@@ -1,24 +1,7 @@
-type Categoria={
-  id : number;
-  name: string;
-}
+import type { Category } from "../types/Category";
+import type {SongGroup} from '../types/SongGroup';
 
-type Song = {
-  id: string;
-  title: string;
-  categoria: Categoria;
-  autor: string;
-  time: string;
-  src: string;
-};
-
-type SongGroup = {
-  id: string;
-  title: string;
-  songs: Song[];
-};
-
-const categorias: Categoria[] = [
+const categorias: Category[] = [
   { id: 1, name: "Trap" },
   { id: 2, name: "Reggaetón" },
   { id: 3, name: "Pop" },
