@@ -13,22 +13,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+#root {
+  margin: 0 auto;
+  padding: 3rem;
+  text-align: center;
+  background-color: #121212;
 }
 
-body {
+html, body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
+  background-color: #121212;
+  color: white;
+}
+
+body{
   min-width: 320px;
   min-height: 100vh;
 }
+
+main{
+  display: flex;
+  min-height: calc(100vh -160px);
+  flex-direction: column;
+}
+
 
 h1 {
   font-size: 3.2em;

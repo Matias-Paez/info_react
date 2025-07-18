@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import './index.css'
-import App from './App.tsx'
 import Layout from './components/Layout.tsx'
 import Home from './pages/Home.tsx'
 import NotFound from './pages/NotFound.tsx'
@@ -17,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/song/:id" element={<SongDetail />} />
           <Route path="*" element={<NotFound/>} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   </StrictMode>,

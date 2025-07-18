@@ -6,10 +6,9 @@ type SoundPlayerProps={
     song:Song;
 }
 
-function SoundPlayer( {song} : SoundPlayerProps){
-    const {title , autor , time , src} = song;
+function SoundPlayer( {song}  : SoundPlayerProps){
+    const {title , autor , time , src } = song;
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    
     
     const [isPlaying, setIsPlaying] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
@@ -17,7 +16,7 @@ function SoundPlayer( {song} : SoundPlayerProps){
     
     useEffect(() => {
         const audio = audioRef.current;
-        
+
         function handleTimeUpdate() {
             if (audio){
                 setCurrentTime(audio.currentTime);
@@ -71,7 +70,6 @@ function SoundPlayer( {song} : SoundPlayerProps){
     return(
             
         <div className={styles.player}>
-
             <div className={styles.left}>
                 <img src={src} alt="Portada" className={styles.cover} />
                 <div className={styles.info}>
@@ -82,14 +80,14 @@ function SoundPlayer( {song} : SoundPlayerProps){
 
             <div className={styles.center}>
                 <div className={styles.controls}>
-                    <img src="./icons/audio/previous.png" alt="Previous" />
+                    <img src="/icons/audio/previous.png" alt="Previous" />
                     <img onClick={togglePlay} src={
                         isPlaying ?
-                        './icons/audio/pause.png'
+                        '/icons/audio/pause.png'
                         : 
-                        './icons/audio/play.png' 
+                        '/icons/audio/play.png' 
                         } alt="Play/Pause" />    
-                    <img src="./icons/audio/next.png" alt="Next" />
+                    <img src="/icons/audio/next.png" alt="Next" />
                 </div>
 
                 <div className={styles.progress}>
@@ -107,7 +105,7 @@ function SoundPlayer( {song} : SoundPlayerProps){
                 </div>
             </div>
 
-        <audio ref={audioRef} autoPlay src="./sound/Ordinary.mp3" />
+            <audio ref={audioRef} autoPlay src="/sound/Ordinary.mp3" />
         </div>
     );
 }

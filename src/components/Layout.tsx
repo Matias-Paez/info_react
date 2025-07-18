@@ -1,4 +1,3 @@
-// src/components/Layout.tsx
 import { Outlet } from "react-router";
 import { useState } from "react";
 import Navbar from "./Navbar";
@@ -24,11 +23,14 @@ export default function Layout() {
   return (
     <>
       <Navbar setSearchSong={setSearchSong} />
-      <main style={{ padding: "24px" }}>
+      <main style={{ padding: "3rem" }}>
         <Outlet context={{ filteredSongs, isSearching, songGroups, selectedSong, setSelectedSong }} />
       </main>
-
-      {selectedSong && <SoundPlayer song={selectedSong} key={selectedSong.id} />}
+      
+      <div style={{padding:'16px'}}>
+        {selectedSong && <SoundPlayer song={selectedSong} key={selectedSong.id} />}
+      </div>
+      
       <Footer />
     </>
   );
