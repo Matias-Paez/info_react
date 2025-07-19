@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import styles from'./SongDetail.module.css'
 import type { Song } from '../types/Song';
 import type { SongGroup } from '../types/SongGroup';
@@ -7,22 +7,29 @@ import { useOutletContext, useParams } from 'react-router';
 type LayoutData = {
   songGroups: SongGroup[];
   setSelectedSong: (song: Song) => void;
+  favoritos : Song [];
+  toggleFavorito : (song:Song) => void;
 };
 
 export default function SongDetail(){
-    const { songGroups, setSelectedSong } = useOutletContext<LayoutData>();
+    const { songGroups, setSelectedSong , toggleFavorito , favoritos} = useOutletContext<LayoutData>();
     const [favorite , setFavorite] = useState(false);
     const {id} = useParams();
-    
+
     const song : Song | undefined = songGroups
     .flatMap( group =>group.songs) //uno todas las canciones
     .find(song => song.id.toString()==id);//devuelvo la coincidencia
     
+    useEffect(() =>{
+        if (song && favoritos.some(fav => fav.id === song.id)) {
+            setFavorite(true);
+        }
+    }, [song, favoritos]);
+
     if (!song){
         return(
             <div className={styles.song_wrapper}>Canción no encontrada.</div>
         );
-        
     }
 
     const {title , autor , time , src} = song;  //array destructuring
@@ -54,14 +61,17 @@ export default function SongDetail(){
                 src="/icons/song/playing.png" alt="Reproducir" className={styles.play_btn} />
                 
                 <img src= {favorite? '/icons/song/favoritoClick.png':'/icons/song/favorito.png'}
-                onClick={()=> setFavorite(!favorite)}
+                onClick={() => {
+                    toggleFavorito(song);
+                    setFavorite(prev => !prev);}
+                }
                 alt="Favorito" className={styles.play_btn} />
             </div>
 
             <div className={styles.artist_box}>
                 <p className= {styles.artist_box_p}>Artistas</p>
                 <div className= {styles.artist_box_div}>
-                    <img src="/assets/dance.jpeg" alt="Duki" className={styles.artist_img} />
+                    <img src="/icons/song/userdefault.png" alt="img_autor" className={styles.artist_img} />
                     <p>{autor}</p>
                 </div>
             </div>

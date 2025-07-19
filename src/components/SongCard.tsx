@@ -22,7 +22,7 @@ function SongCard({song, setSelectedSong}:SongCardProps){
             </Link>
             <img
             onClick={() => setSelectedSong(song)} 
-            src={"./icons/song/playing.png"} alt="imagen al pasar el mause" className={styles.card_hover_image} />
+            src={"/icons/song/playing.png"} alt="imagen al pasar el mause" className={styles.card_hover_image} />
         </article>
     );
 }
