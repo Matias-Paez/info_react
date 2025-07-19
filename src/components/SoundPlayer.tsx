@@ -1,10 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import styles from './SoundPlayerStyles.module.css';
+import type { Song } from "../types/Song";
 
-function SoundPlayer({song}){
-    const {title , autor , time , src} = song;
+type SoundPlayerProps={
+    song:Song;
+}
+
+function SoundPlayer( {song}  : SoundPlayerProps){
+    const {title , autor , time , src } = song;
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    
     
     const [isPlaying, setIsPlaying] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
@@ -12,13 +16,17 @@ function SoundPlayer({song}){
     
     useEffect(() => {
         const audio = audioRef.current;
-        
+
         function handleTimeUpdate() {
-            setCurrentTime(audio.currentTime);
+            if (audio){
+                setCurrentTime(audio.currentTime);
+            }
         }
 
         function handleLoadedMetadata() {
-            setDuration(audio.duration);
+            if(audio){
+                setDuration(audio.duration);
+            }
         }
 
         if (audio) {
@@ -43,7 +51,7 @@ function SoundPlayer({song}){
         setIsPlaying(!isPlaying);
     }
     
-    function handleSeek(event) {
+    function handleSeek(event : React.ChangeEvent<HTMLInputElement>) {
         const value = parseFloat(event.target.value);
         
         if (duration && audioRef.current) {
@@ -62,7 +70,6 @@ function SoundPlayer({song}){
     return(
             
         <div className={styles.player}>
-
             <div className={styles.left}>
                 <img src={src} alt="Portada" className={styles.cover} />
                 <div className={styles.info}>
@@ -73,14 +80,14 @@ function SoundPlayer({song}){
 
             <div className={styles.center}>
                 <div className={styles.controls}>
-                    <img src="./icons/audio/previous.png" alt="Previous" />
+                    <img src="/icons/audio/previous.png" alt="Previous" />
                     <img onClick={togglePlay} src={
                         isPlaying ?
-                        './icons/audio/pause.png'
+                        '/icons/audio/pause.png'
                         : 
-                        './icons/audio/play.png' 
+                        '/icons/audio/play.png' 
                         } alt="Play/Pause" />    
-                    <img src="./icons/audio/next.png" alt="Next" />
+                    <img src="/icons/audio/next.png" alt="Next" />
                 </div>
 
                 <div className={styles.progress}>
@@ -98,7 +105,7 @@ function SoundPlayer({song}){
                 </div>
             </div>
 
-        <audio ref={audioRef} autoPlay src="./sound/Ordinary.mp3" />
+            <audio ref={audioRef} autoPlay src="/sound/Ordinary.mp3" />
         </div>
     );
 }

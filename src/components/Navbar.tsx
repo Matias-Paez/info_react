@@ -1,12 +1,13 @@
+import { Link } from "react-router";
 import spotifyLogo from "../assets/spotify.png";
 import styles from './NavbarStyle.module.css'
 
+type SearchProps ={
+  searchSong: string
+  setSearchSong : (nameSong: string) => void;
+};
 
-function Navbar({onSearchChange} : {onSearchChange : (nameSong: string) => void}){
-
-  function handleChange( e: React.ChangeEvent<HTMLInputElement>){
-    onSearchChange(e.target.value.toLowerCase());
-  }
+function Navbar({searchSong , setSearchSong} : SearchProps){
 
   return (
     <nav className={styles.navbar}>
@@ -18,13 +19,15 @@ function Navbar({onSearchChange} : {onSearchChange : (nameSong: string) => void}
       <input 
         className={styles.search_input}
         type="text"
+        value={searchSong}
         placeholder="Encuentra tu canción favorita"
-        onChange={handleChange}
+        onChange={(e)=>setSearchSong(e.target.value.toLocaleLowerCase())}
+        
         />
       
       <ul className={styles.navList}>
-        <li><a className={styles.link} href="#">Home</a></li>
-        <li><a className={styles.link} href="#">Planes</a></li>
+        <li> <Link className={styles.link} to={'/'}>Home</Link></li>
+        <li> <Link className={styles.link} to={'/favorites'} >Favoritos</Link> </li>
         <li><a className={styles.link} href="#">Descargar App</a></li>
         <li><a className={styles.link} href="#">Registrarse</a></li>
       </ul>
