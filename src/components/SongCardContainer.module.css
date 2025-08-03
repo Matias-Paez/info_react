@@ -1,5 +1,4 @@
 .article_container {
-  padding: 24px 24px;
   background-color: #121212;
   color: white;
 }
@@ -13,6 +12,6 @@
 
 .songs {
   display: flex;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 24px;
 }
