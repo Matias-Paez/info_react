@@ -1,7 +1,4 @@
-import type { Category } from "../types/Category";
-import type {SongGroup} from '../types/SongGroup';
-
-const categorias: Category[] = [
+let categorias = [
   { id: 1, name: "Trap" },
   { id: 2, name: "Reggaetón" },
   { id: 3, name: "Pop" },
@@ -13,7 +10,7 @@ const categorias: Category[] = [
   { id: 9, name: "Rap melódico" },
 ];
 
-const songGroups: SongGroup[] = [
+let musicDB = [
   {
     id: "1",
     title: "Tus canciones favoritas",
@@ -64,4 +61,9 @@ const songGroups: SongGroup[] = [
   },
 ];
 
-export default songGroups
+// Get next available ID
+export const getNextId = () => {
+  return Math.max(...musicDB.map((group) => Math.max( ...group.songs.map((song) => song.id )))) + 1;
+};
+
+export { musicDB , categorias };
