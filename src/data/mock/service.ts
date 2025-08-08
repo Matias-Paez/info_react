@@ -1,5 +1,4 @@
-import { musicDB, getNextId } from '../data/music.js';
-
+import { musicDB  } from "./data";
 // Simulate API delay
 const delay = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -17,31 +16,34 @@ export const musicService = {
   },
 
   // GET song by ID
-  async getSongById(id) {
+  async getSongById(id? : string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : musicDB;
-    const song = songs.find((s) => s.id === parseInt(id));
+   // const songs = stored ? JSON.parse(stored) : musicDB;
+    const groups = stored ? JSON.parse(stored) : musicDB;
+    const song  = groups.flatMap( group => group.songs).find( song => song.id.toString()===id)
+    //const song = songs.find((s) => s.id === parseInt(id));
     if (!song) {
       throw new Error('Song not found');
     }
     return song;
   },
 
-  // GET songs by genre
-  async getSongsByGenre(genre) {
+  // GET songs by category
+  async getSongsByCategory(category_id ? : string ) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : musicDB;
+    const groups = stored ? JSON.parse(stored) : musicDB;
 
-    if (!genre) {
+    if (!category_id) {
       throw new Error('Genre parameter is required');
     }
-
-    return songs.filter((song) =>
-      song.genre.some((g) => g.toLowerCase() === genre.toLowerCase())
+    const songs = groups.flatMap( group => 
+      group.songs.filter( song => song.categoria.id.toString() == category_id)
     );
+    return songs;
   },
+   
 
   // GET songs by artist
   async getSongsByArtist(artist) {
@@ -82,57 +84,6 @@ export const musicService = {
         songs: genreMap[genre],
       }))
       .sort((a, b) => a.genre.localeCompare(b.genre));
-  },
-
-  // POST - Create new song
-  async createSong(songData) {
-    await delay(400);
-    const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : [...musicDB];
-
-    const newSong = {
-      ...songData,
-      id: getNextId(),
-      cover:
-        songData.cover ||
-        'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=400',
-    };
-
-    songs.push(newSong);
-    localStorage.setItem('musicDB', JSON.stringify(songs));
-    return newSong;
-  },
-
-  // PUT - Update existing song
-  async updateSong(id, songData) {
-    await delay(400);
-    const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : [...musicDB];
-
-    const index = songs.findIndex((s) => s.id === parseInt(id));
-    if (index === -1) {
-      throw new Error('Song not found');
-    }
-
-    songs[index] = { ...songs[index], ...songData };
-    localStorage.setItem('musicDB', JSON.stringify(songs));
-    return songs[index];
-  },
-
-  // DELETE song
-  async deleteSong(id) {
-    await delay(300);
-    const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : [...musicDB];
-
-    const index = songs.findIndex((s) => s.id === parseInt(id));
-    if (index === -1) {
-      throw new Error('Song not found');
-    }
-
-    songs.splice(index, 1);
-    localStorage.setItem('musicDB', JSON.stringify(songs));
-    return { success: true };
   },
 
   // Search songs

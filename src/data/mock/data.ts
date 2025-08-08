@@ -1,4 +1,4 @@
-let categorias = [
+const categorias  = [
   { id: 1, name: "Trap" },
   { id: 2, name: "Reggaetón" },
   { id: 3, name: "Pop" },
@@ -10,7 +10,7 @@ let categorias = [
   { id: 9, name: "Rap melódico" },
 ];
 
-let musicDB = [
+const musicDB = [
   {
     id: "1",
     title: "Tus canciones favoritas",
@@ -63,7 +63,7 @@ let musicDB = [
 
 // Get next available ID
 export const getNextId = () => {
-  return Math.max(...musicDB.map((group) => Math.max( ...group.songs.map((song) => song.id )))) + 1;
+  return Math.max(...musicDB.map((group) => Math.max( ...group.songs.map((song) => Number(song.id) )))) + 1;
 };
 // estoy en la rama entrega_4 
-export { musicDB , categorias };
+export { musicDB };

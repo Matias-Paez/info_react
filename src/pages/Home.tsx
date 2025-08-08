@@ -6,24 +6,56 @@ import styles from './Home.module.css';
 
 import type { SongGroup } from "../types/SongGroup";
 import type { Song } from "../types/Song";
+import { useEffect, useState } from "react";
+
+
+
+import { musicService } from '../data/mock/service';
 
 type LayoutData = {
   filteredSongs: Song[];
-  songGroups: SongGroup[];
+  //songGroups: SongGroup[];
   isSearching: boolean;
   setSelectedSong: (song: Song) => void;
 };
 
+
 export default function Home() {
-  const { filteredSongs, songGroups, isSearching, setSelectedSong } = useOutletContext<LayoutData>();
-    
-  ///parte nueva 
-  const categorias = [
+  //const { filteredSongs, songGroups, isSearching, setSelectedSong } = useOutletContext<LayoutData>();
+  const { filteredSongs, isSearching, setSelectedSong } = useOutletContext<LayoutData>();
+  const [loading , setLoading] = useState(false);
+  const [songGroups  , setSongGroups] = useState<SongGroup[] | null>(null);
+  
+  const loadSongs = async () => {
+    try{
+      setLoading(true);
+      const data = await musicService.getAllSongs();
+      setSongGroups(data);
+    }catch( error){
+      console.error('error ' , error);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    loadSongs();
+  } , []);
+  
+  if(loading){
+    return <p>Cargando</p>
+  }
+  
+  if(!songGroups){
+    return <p>No hay canciones disponibles.</p>
+  }
+  const categorias = [  
     ...new Set(
-        songGroups.flatMap(group => group.songs.map(song => song.categoria))
+      songGroups.flatMap(group => group.songs.map(song => song.categoria))
     ),
   ];
-
+  ///parte nueva 
+ 
   return (
     <>
       <div className={styles.content} >
