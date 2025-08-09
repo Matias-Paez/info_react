@@ -5,21 +5,23 @@ import SoundPlayer from "./SoundPlayer";
 import Footer from "./Footer"; 
 
 import type { Song } from "../types/Song";
-import songGroups from "../data/songsGrups";
 import { musicService } from "../data/mock/service";
 
 export default function Layout() {
-  const [searchSong, setSearchSong] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song>();
-  
+  const [searchSong, setSearchSong] = useState("");
   const isSearching = searchSong.trim() !== "";
-  const filteredSongs = isSearching ? songGroups.flatMap(group =>
-    group.songs.filter(song =>
-      song.title.toLowerCase().includes(searchSong.toLowerCase())
-    )): [];
-
-  
+  const [filteredSongs, setfilteredSongs] = useState<Song[] >([]);
   const [favoritos, setFavoritos] = useState<Song[]>([]);
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      const results = await musicService.searchSongs(searchSong);
+      setfilteredSongs(results);
+    };
+
+    fetchSongs();
+  }, [searchSong]);
 
   useEffect( () => {
     loadSongsFavorites();

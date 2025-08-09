@@ -1,4 +1,3 @@
-import type { Song } from "../../types/Song";
 import type { SongGroup } from "../../types/SongGroup";
 import { musicDB  } from "./data";
 // Simulate API delay
@@ -81,14 +80,12 @@ export const musicService = {
   async searchSongs(query :string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : musicDB;
+    const groups :SongGroup[] = stored ? JSON.parse(stored) : musicDB;
 
-    if (!query) return songs;
-
-    return songs.filter(
-      (song :Song) =>
-        song.title.toLowerCase().includes(query.toLowerCase()) ||
-        song.autor.toLowerCase().includes(query.toLowerCase())
+    return groups.flatMap(
+      group => group.songs.filter(
+        song => song.title.toLowerCase().includes(query.toLowerCase())|| song.autor.toLowerCase().includes(query.toLowerCase())
+      )
     );
   },
 };
