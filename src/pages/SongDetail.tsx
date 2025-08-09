@@ -3,7 +3,7 @@ import styles from'./SongDetail.module.css';
 import type { Song } from '../types/Song';
 import { useOutletContext, useParams } from 'react-router';
 
-import { musicService } from '../data/mock/service';
+import { musicService } from '../data/mock/service.ts';
 
 type LayoutData = {
   setSelectedSong: (song: Song) => void;
@@ -12,7 +12,7 @@ type LayoutData = {
 
 export default function SongDetail(){
     const { setSelectedSong , toggleFavorito } = useOutletContext<LayoutData>();
-    const [favorite , setFavorite] = useState<boolean | null>(null); 
+    const [favorite , setFavorite] = useState<boolean>(); 
     const {id} = useParams();
     const [song, setSong] = useState<Song| null>();
     const [loading , setLoading] = useState(false);

@@ -18,7 +18,7 @@ export const musicService = {
   },
 
   // GET song by ID
-  async getSongById(id : string) {
+  async getSongById(id ? : string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
    // const songs = stored ? JSON.parse(stored) : musicDB;
@@ -32,7 +32,7 @@ export const musicService = {
   },
 
   // GET songs by category
-  async getSongsByCategory(category_id : string) {
+  async getSongsByCategory(category_id ? : string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
     const groups : SongGroup [] = stored ? JSON.parse(stored) : musicDB;

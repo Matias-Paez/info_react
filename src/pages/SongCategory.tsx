@@ -4,7 +4,7 @@ import SongCard from "../components/SongCard";
 import SongCardContainer from "../components/SongCardcontainer";
 
 import type { Song } from "../types/Song";
-import { musicService } from "../data/mock/service";
+import { musicService } from "../data/mock/service.ts";
 
 type LayoutData = {
     setSelectedSong: (song: Song) => void;

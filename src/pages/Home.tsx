@@ -7,7 +7,7 @@ import type { SongGroup } from "../types/SongGroup";
 import type { Song } from "../types/Song";
 import { useEffect, useState } from "react";
 
-import { musicService } from '../data/mock/service';
+import { musicService } from '../data/mock/service.ts';
 
 type LayoutData = {
   filteredSongs: Song[];
