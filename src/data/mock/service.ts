@@ -1,3 +1,5 @@
+import type { Song } from "../../types/Song";
+import type { SongGroup } from "../../types/SongGroup";
 import { musicDB  } from "./data";
 // Simulate API delay
 const delay = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,11 +18,11 @@ export const musicService = {
   },
 
   // GET song by ID
-  async getSongById(id? : string) {
+  async getSongById(id : string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
    // const songs = stored ? JSON.parse(stored) : musicDB;
-    const groups = stored ? JSON.parse(stored) : musicDB;
+    const groups :SongGroup [] = stored ? JSON.parse(stored) : musicDB;
     const song  = groups.flatMap( group => group.songs).find( song => song.id.toString()===id);
     //const song = songs.find((s) => s.id === parseInt(id));
     if (!song) {
@@ -30,10 +32,10 @@ export const musicService = {
   },
 
   // GET songs by category
-  async getSongsByCategory(category_id ? : string ) {
+  async getSongsByCategory(category_id : string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const groups = stored ? JSON.parse(stored) : musicDB;
+    const groups : SongGroup [] = stored ? JSON.parse(stored) : musicDB;
 
     if (!category_id) {
       throw new Error('Genre parameter is required');
@@ -49,7 +51,7 @@ export const musicService = {
   async getSongsFav() {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const groups = stored ? JSON.parse(stored) : musicDB;
+    const groups : SongGroup [] = stored ? JSON.parse(stored) : musicDB;
 
     const favorites  = groups.flatMap( group => group.songs.filter(song=> song.favorite));
 
@@ -57,10 +59,10 @@ export const musicService = {
   },
 
   // TOGGLE favorite status
-  async toggleFavorite(id: string) {
+  async toggleFavorite(id :string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const groups = stored ? JSON.parse(stored) : musicDB;
+    const groups : SongGroup [] = stored ? JSON.parse(stored) : musicDB;
 
     const updatedGroups = groups.map(group => ({
       ...group,
@@ -75,34 +77,8 @@ export const musicService = {
     return true;
   },
 
-  // GET all genres with songs grouped by genre
-  async getGenres() {
-    await delay(200);
-    const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : musicDB;
-
-    const genreMap = {};
-
-    songs.forEach((song) => {
-      song.genre.forEach((genre) => {
-        if (!genreMap[genre]) {
-          genreMap[genre] = [];
-        }
-        genreMap[genre].push(song);
-      });
-    });
-
-    // Convert to array format with genre name and songs
-    return Object.keys(genreMap)
-      .map((genre) => ({
-        genre,
-        songs: genreMap[genre],
-      }))
-      .sort((a, b) => a.genre.localeCompare(b.genre));
-  },
-
   // Search songs
-  async searchSongs(query) {
+  async searchSongs(query :string) {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
     const songs = stored ? JSON.parse(stored) : musicDB;
@@ -110,11 +86,9 @@ export const musicService = {
     if (!query) return songs;
 
     return songs.filter(
-      (song) =>
+      (song :Song) =>
         song.title.toLowerCase().includes(query.toLowerCase()) ||
-        song.artist.toLowerCase().includes(query.toLowerCase()) ||
-        song.album.toLowerCase().includes(query.toLowerCase()) ||
-        song.genre.some((g) => g.toLowerCase().includes(query.toLowerCase()))
+        song.autor.toLowerCase().includes(query.toLowerCase())
     );
   },
 };

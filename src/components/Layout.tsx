@@ -11,6 +11,7 @@ import { musicService } from "../data/mock/service";
 export default function Layout() {
   const [searchSong, setSearchSong] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song>();
+  
   const isSearching = searchSong.trim() !== "";
   const filteredSongs = isSearching ? songGroups.flatMap(group =>
     group.songs.filter(song =>
