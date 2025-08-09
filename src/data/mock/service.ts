@@ -21,7 +21,7 @@ export const musicService = {
     const stored = localStorage.getItem('musicDB');
    // const songs = stored ? JSON.parse(stored) : musicDB;
     const groups = stored ? JSON.parse(stored) : musicDB;
-    const song  = groups.flatMap( group => group.songs).find( song => song.id.toString()===id)
+    const song  = groups.flatMap( group => group.songs).find( song => song.id.toString()===id);
     //const song = songs.find((s) => s.id === parseInt(id));
     if (!song) {
       throw new Error('Song not found');
@@ -46,18 +46,33 @@ export const musicService = {
    
 
   // GET songs by artist
-  async getSongsByArtist(artist) {
+  async getSongsFav() {
     await delay(200);
     const stored = localStorage.getItem('musicDB');
-    const songs = stored ? JSON.parse(stored) : musicDB;
+    const groups = stored ? JSON.parse(stored) : musicDB;
 
-    if (!artist) {
-      throw new Error('Artist parameter is required');
-    }
+    const favorites  = groups.flatMap( group => group.songs.filter(song=> song.favorite));
 
-    return songs.filter((song) =>
-      song.artist.toLowerCase().includes(artist.toLowerCase())
-    );
+    return favorites;
+  },
+
+  // TOGGLE favorite status
+  async toggleFavorite(id: string) {
+    await delay(200);
+    const stored = localStorage.getItem('musicDB');
+    const groups = stored ? JSON.parse(stored) : musicDB;
+
+    const updatedGroups = groups.map(group => ({
+      ...group,
+      songs: group.songs.map(song =>
+        song.id.toString() === id
+          ? { ...song, favorite: !song.favorite }
+          : song
+      )
+    }));
+
+    localStorage.setItem('musicDB', JSON.stringify(updatedGroups));
+    return true;
   },
 
   // GET all genres with songs grouped by genre

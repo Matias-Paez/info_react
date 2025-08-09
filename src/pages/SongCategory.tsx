@@ -1,10 +1,9 @@
 import { useOutletContext, useParams } from "react-router"
+import { useEffect, useState } from "react";
 import SongCard from "../components/SongCard";
 import SongCardContainer from "../components/SongCardcontainer";
 
-
 import type { Song } from "../types/Song";
-import { useEffect, useState } from "react";
 import { musicService } from "../data/mock/service";
 
 type LayoutData = {
@@ -41,7 +40,7 @@ export default function SongCategory(){
     return <p style={{padding:'25px' }}>No se encontrarón canciones.</p>
    }
 
-    //para obtener el nombre de la categoria 
+    //para obtener el nombre de la categoria
     const categoria = songs.find((song)=> song.categoria.id.toString()== id)?.categoria.name ?? '';
     return(
         <div style={{width:'100%' , maxWidth:'1200px', margin:'0 auto'}}>

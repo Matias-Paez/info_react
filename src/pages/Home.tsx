@@ -3,25 +3,19 @@ import SongCardContainer from "../components/SongCardcontainer";
 import SongCard from "../components/SongCard";
 import ContentCategory from "../components/ContentCategory";
 import styles from './Home.module.css';
-
 import type { SongGroup } from "../types/SongGroup";
 import type { Song } from "../types/Song";
 import { useEffect, useState } from "react";
-
-
 
 import { musicService } from '../data/mock/service';
 
 type LayoutData = {
   filteredSongs: Song[];
-  //songGroups: SongGroup[];
   isSearching: boolean;
   setSelectedSong: (song: Song) => void;
 };
 
-
 export default function Home() {
-  //const { filteredSongs, songGroups, isSearching, setSelectedSong } = useOutletContext<LayoutData>();
   const { filteredSongs, isSearching, setSelectedSong } = useOutletContext<LayoutData>();
   const [loading , setLoading] = useState(false);
   const [songGroups  , setSongGroups] = useState<SongGroup[] | null>(null);
@@ -49,13 +43,15 @@ export default function Home() {
   if(!songGroups){
     return <p>No hay canciones disponibles.</p>
   }
-  const categorias = [  
-    ...new Set(
-      songGroups.flatMap(group => group.songs.map(song => song.categoria))
-    ),
-  ];
-  ///parte nueva 
  
+  const categorias = [  
+    ...new Map(
+        songGroups
+        .flatMap(group => group.songs.map(song => song.categoria))
+        .map(cat => [cat.id, cat]) // clave: id, valor: objeto categoría
+    ).values()
+  ];
+
   return (
     <>
       <div className={styles.content} >
