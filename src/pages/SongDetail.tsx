@@ -1,38 +1,50 @@
-import { useState , useEffect } from 'react'
-import styles from'./SongDetail.module.css'
+import { useState , useEffect } from 'react';
+import styles from'./SongDetail.module.css';
 import type { Song } from '../types/Song';
-import type { SongGroup } from '../types/SongGroup';
 import { useOutletContext, useParams } from 'react-router';
 
+import { musicService } from '../data/mock/service.ts';
+
 type LayoutData = {
-  songGroups: SongGroup[];
   setSelectedSong: (song: Song) => void;
-  favoritos : Song [];
-  toggleFavorito : (song:Song) => void;
+  toggleFavorito : (id : string) => void;
 };
 
 export default function SongDetail(){
-    const { songGroups, setSelectedSong , toggleFavorito , favoritos} = useOutletContext<LayoutData>();
-    const [favorite , setFavorite] = useState(false);
+    const { setSelectedSong , toggleFavorito } = useOutletContext<LayoutData>();
+    const [favorite , setFavorite] = useState<boolean>(); 
     const {id} = useParams();
+    const [song, setSong] = useState<Song| null>();
+    const [loading , setLoading] = useState(false);
 
-    const song : Song | undefined = songGroups
-    .flatMap( group =>group.songs) //uno todas las canciones
-    .find(song => song.id.toString()==id);//devuelvo la coincidencia
-    
-    useEffect(() =>{
-        if (song && favoritos.some(fav => fav.id === song.id)) {
-            setFavorite(true);
+    const loadSong = async () =>{
+        try{
+            setLoading(true);
+            const data = await musicService.getSongById(id);
+            setFavorite(data.favorite);
+            setSong(data);
+        }catch(error){
+            setLoading(false);
+            console.error('error ',error);
+        }finally{
+            setLoading(false);
         }
-    }, [song, favoritos]);
+    }
 
+    useEffect(() =>{
+        loadSong();
+    }, []);
+
+    if (loading){
+        return <p>Cargando Canción</p>
+    }
     if (!song){
         return(
             <div className={styles.song_wrapper}>Canción no encontrada.</div>
         );
     }
 
-    const {title , autor , time , src} = song;  //array destructuring
+    const { title , autor , time , src} = song;  //array destructuring
     return (
         <div className={styles.song_wrapper}>
             
@@ -62,8 +74,9 @@ export default function SongDetail(){
                 
                 <img src= {favorite? '/icons/song/favoritoClick.png':'/icons/song/favorito.png'}
                 onClick={() => {
-                    toggleFavorito(song);
-                    setFavorite(prev => !prev);}
+                    toggleFavorito(song.id);
+                    setFavorite(prev => !prev);
+                    }
                 }
                 alt="Favorito" className={styles.play_btn} />
             </div>

@@ -6,8 +6,6 @@ type PropContentCategory ={
     categories : Category[];
 }
 export default function ContenCategory({categories} : PropContentCategory){
-
-    
     if(categories)
         return (
             <div>

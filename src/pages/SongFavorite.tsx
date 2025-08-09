@@ -1,9 +1,9 @@
-import { Link, useOutletContext } from "react-router"
+import { Link, useOutletContext } from "react-router";
 import type { Song } from "../types/Song";
 import styles from './SongFavorite.module.css'
 
 type LayoutData = {
-  toggleFavorito:  (song: Song) => void;
+  toggleFavorito:  (id : string) => void;
   favoritos : Song [];
 };
 
@@ -27,10 +27,11 @@ export default function SongFavorite(){
                                     </Link>
                                     <p className={styles.autor}>{fav.autor}</p>
                                 </div>
+                                
                                 <p className={styles.duracion}>{fav.time}</p>
 
                                 <img 
-                                    onClick={() => toggleFavorito(fav)} 
+                                    onClick={() => toggleFavorito(fav.id)} 
                                     className={styles.img_favorito} 
                                     src="/icons/song/favoritoClick.png" alt="Quitar de favorito" title="Quitar de favoritos" 
                                 />
@@ -39,8 +40,5 @@ export default function SongFavorite(){
                 </div>
             )}
         </div>
-
-
     );
-
 }
